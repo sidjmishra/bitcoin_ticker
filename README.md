@@ -1,6 +1,8 @@
 # bitcointicker
 
 A new Flutter application.
+Bitcoin Ticker which shows values of Bitcoin, Ethereum & LiteCoin at realtime according to specific country.
+API Used : CoinAPI
 
 ## Getting Started
 
