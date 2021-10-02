@@ -10,7 +10,7 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency = 'AUD';
+  String? selectedCurrency = 'AUD';
 
   DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> dropdownItems = [];
@@ -97,7 +97,7 @@ class _PriceScreenState extends State<PriceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-            child: Text('Coin Ticker'),
+          child: Text('Coin Ticker'),
         ),
       ),
       body: Container(
@@ -132,9 +132,9 @@ class CryptoCard extends StatelessWidget {
     this.selectedCurrency,
     this.cryptoCurrency,
   });
-  final String value;
-  final String selectedCurrency;
-  final String cryptoCurrency;
+  final String? value;
+  final String? selectedCurrency;
+  final String? cryptoCurrency;
 
   @override
   Widget build(BuildContext context) {

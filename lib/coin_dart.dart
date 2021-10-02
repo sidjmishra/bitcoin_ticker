@@ -1,5 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:bitcointicker/secrets/secret.dart';
+import 'package:bitcointicker/secrets/secretLoader.dart';
+import 'package:dio/dio.dart';
 
 const List<String> currenciesList = [
   'AUD',
@@ -25,7 +26,6 @@ const List<String> currenciesList = [
   'ZAR'
 ];
 
-
 const List<String> cryptoList = [
   'BTC',
   'ETH',
@@ -33,22 +33,35 @@ const List<String> cryptoList = [
 ];
 
 const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
-const apiKey = 'YOUR_API_KEY';
 
 class CoinData {
-  Future getCoinData(String selectedCurrency) async {
+  Future getCoinData(String? selectedCurrency) async {
+    // Get the API key
+
+    Secret secret = await SecretLoader(secretPath: "secrets.json").load();
+    final API_KEY = secret.API_KEY;
+
+    // Get the coin data from the API
+
     Map<String, String> cryptoPrices = {};
     for (String crypto in cryptoList) {
       String requestURL =
-          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$apiKey';
-      http.Response response = await http.get(requestURL);
-      if (response.statusCode == 200) {
-        var decodedData = jsonDecode(response.body);
-        double price = decodedData['rate'];
-        cryptoPrices[crypto] = price.toStringAsFixed(0);
-      } else {
-        print(response.statusCode);
-        throw 'Problem with the get request';
+          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$API_KEY';
+
+      try {
+        var dio = Dio();
+        final response = await dio.get(requestURL);
+        if (response.statusCode == 200) {
+          var decodedData = response.data;
+          double price = decodedData['rate'];
+          print("Here" + price.toString());
+          cryptoPrices[crypto] = price.toStringAsFixed(0);
+        } else {
+          print(response.statusCode);
+          throw 'Problem with the get request';
+        }
+      } catch (e) {
+        throw "Error";
       }
     }
     return cryptoPrices;
