@@ -1,10 +1,12 @@
 import 'package:bitcointicker/coin_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'dart:io' show Platform;
+import 'package:google_fonts/google_fonts.dart';
 
 class PriceScreen extends StatefulWidget {
+  const PriceScreen({Key? key}) : super(key: key);
+
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
@@ -25,6 +27,8 @@ class _PriceScreenState extends State<PriceScreen> {
     return DropdownButton<String>(
       value: selectedCurrency,
       items: dropdownItems,
+      style: GoogleFonts.poppins(color: Colors.white, fontSize: 24.0),
+      underline: const SizedBox(),
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
@@ -56,7 +60,7 @@ class _PriceScreenState extends State<PriceScreen> {
   Map<String, String> coinValues = {};
   bool isWaiting = false;
 
-  void getData() async {
+  Future<void> getData() async {
     isWaiting = true;
     try {
       var data = await CoinData().getCoinData(selectedCurrency);
@@ -65,14 +69,14 @@ class _PriceScreenState extends State<PriceScreen> {
         coinValues = data;
       });
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getData();
+    getData().then((value) => null);
   }
 
   Column makeCards() {
@@ -96,12 +100,11 @@ class _PriceScreenState extends State<PriceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Coin Ticker'),
-        ),
+        title: const Text('Coin Ticker'),
+        centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("images/bitcoin.png"),
             fit: BoxFit.cover,
@@ -111,14 +114,19 @@ class _PriceScreenState extends State<PriceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            makeCards(),
+            const SizedBox(
+              height: 16.0,
+            ),
             Container(
-              height: 150.0,
               alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 30.0),
+              padding: const EdgeInsets.only(bottom: 30.0),
               color: Colors.transparent,
               child: Platform.isIOS ? iOSPicker() : androidDropdown(),
             ),
+            makeCards(),
+            const SizedBox(
+              height: 32.0,
+            )
           ],
         ),
       ),
@@ -127,19 +135,18 @@ class _PriceScreenState extends State<PriceScreen> {
 }
 
 class CryptoCard extends StatelessWidget {
-  const CryptoCard({
-    this.value,
-    this.selectedCurrency,
-    this.cryptoCurrency,
-  });
   final String? value;
   final String? selectedCurrency;
   final String? cryptoCurrency;
 
+  const CryptoCard(
+      {Key? key, this.value, this.selectedCurrency, this.cryptoCurrency})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+      padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
       child: Card(
         color: Colors.lightBlueAccent,
         elevation: 5.0,
@@ -147,11 +154,11 @@ class CryptoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
           child: Text(
             '1 $cryptoCurrency = $value $selectedCurrency',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15.0,
               color: Colors.white,
             ),

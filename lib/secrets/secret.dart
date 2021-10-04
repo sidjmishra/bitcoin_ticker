@@ -1,7 +1,7 @@
 class Secret {
-  final String? API_KEY;
-  Secret({this.API_KEY = ""});
+  final String? apiKey;
+  Secret({this.apiKey = ""});
   factory Secret.fromJson(Map<String, dynamic> jsonMap) {
-    return new Secret(API_KEY: jsonMap["API_KEY"]);
+    return Secret(apiKey: jsonMap["API_KEY"]);
   }
 }
