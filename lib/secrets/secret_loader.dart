@@ -8,7 +8,7 @@ class SecretLoader {
 
   SecretLoader({this.secretPath});
   Future<Secret> load() {
-    return rootBundle.loadStructuredData<Secret>(this.secretPath!,
+    return rootBundle.loadStructuredData<Secret>(secretPath!,
         (jsonStr) async {
       final secret = Secret.fromJson(json.decode(jsonStr));
       return secret;
